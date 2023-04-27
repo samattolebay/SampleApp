@@ -6,7 +6,7 @@ import com.sample.data.network.model.CharacterIconResponseData
 import com.sample.data.network.model.CharacterResponseData
 
 fun CharacterResponseData.toCharacterData() = CharacterData(
-    firstUrl, icon.toCharacterIconData(), text
+    firstUrl, icon.toCharacterIconData(), text, firstUrl.substringAfterLast("/")
 )
 
 fun CharacterIconResponseData.toCharacterIconData() = CharacterIconData(url)

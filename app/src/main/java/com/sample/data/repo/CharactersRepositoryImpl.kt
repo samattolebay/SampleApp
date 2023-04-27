@@ -32,7 +32,7 @@ class CharactersRepositoryImpl(
 
     override suspend fun getCharacter(name: String): Result<CharacterData> {
         return withContext(ioDispatcher) {
-            val character = characters.value?.find { it.firstUrl == name }
+            val character = characters.value?.find { it.name == name }
             if (character != null) Result.success(character) else Result.failure(IOException("No character found!"))
         }
     }

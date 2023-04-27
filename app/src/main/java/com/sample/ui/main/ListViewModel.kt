@@ -13,7 +13,7 @@ class ListViewModel(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val _loadingVisibility = MutableLiveData<Boolean>()
+    private val _loadingVisibility = MutableLiveData(true)
     val loadingVisibility: LiveData<Boolean> = _loadingVisibility
 
     private val _characters: MutableLiveData<List<CharacterViewData>> =
