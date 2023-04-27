@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
+import com.sample.BuildConfig
 import com.sample.R
 import com.sample.ui.details.DetailsFragment
 import com.sample.ui.util.Factory
@@ -24,6 +25,8 @@ class ListFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.fetchCharacters(BuildConfig.CHARACTER)
 
         val slidingPaneLayout = view.findViewById<SlidingPaneLayout>(R.id.main)
         slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED

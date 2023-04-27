@@ -9,7 +9,7 @@ interface CharacterApi {
 
     @GET(".")
     suspend fun getCharacters(
-        @Query("q") q: String = "the wire characters",
+        @Query("q") q: String,
         @Query("format") format: String = "json",
     ): Response<CharactersResponseData>
 }

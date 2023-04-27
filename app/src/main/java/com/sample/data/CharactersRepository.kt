@@ -6,7 +6,7 @@ import com.sample.data.model.CharactersData
 
 interface CharactersRepository {
 
-    suspend fun fetchCharacters(): Result<Unit>
+    suspend fun fetchCharacters(query: String): Result<Unit>
 
     fun getCharacters(): LiveData<CharactersData>
 

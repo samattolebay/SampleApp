@@ -17,6 +17,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Specifies one flavor dimension.
+    flavorDimensions += "version"
+    productFlavors {
+        create("simpsons") {
+            resValue "string", "app_name", "Simpsons Character Viewer"
+            buildConfigField "String", "CHARACTER", '"simpsons characters"'
+            applicationIdSuffix = ".simpsonsviewer"
+        }
+        create("wire") {
+            resValue "string", "app_name", "The Wire Character Viewer"
+            buildConfigField "String", "CHARACTER", '"the wire characters"'
+            applicationIdSuffix = ".wireviewer"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

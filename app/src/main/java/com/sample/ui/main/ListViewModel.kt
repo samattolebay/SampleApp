@@ -17,9 +17,9 @@ class ListViewModel(
         charactersRepository.getCharacters().map { it.toCharactersViewData() } as MutableLiveData
     val characters: LiveData<CharactersViewData> = _characters
 
-    init {
+    fun fetchCharacters(query: String) {
         viewModelScope.launch {
-            val response = charactersRepository.fetchCharacters()
+            val response = charactersRepository.fetchCharacters(query)
             response.onFailure {
                 _error.postValue(it.message.toString())
             }

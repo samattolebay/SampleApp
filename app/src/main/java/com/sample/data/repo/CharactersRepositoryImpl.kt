@@ -19,9 +19,9 @@ class CharactersRepositoryImpl(
     // In-memory cache
     private val characters = MutableLiveData<CharactersData>()
 
-    override suspend fun fetchCharacters(): Result<Unit> {
+    override suspend fun fetchCharacters(query: String): Result<Unit> {
         return withContext(ioDispatcher) {
-            val response = characterApi.getCharacters()
+            val response = characterApi.getCharacters(query)
             if (response.isSuccessful) {
                 characters.postValue(response.body()!!.toCharactersData())
                 Result.success(Unit)
