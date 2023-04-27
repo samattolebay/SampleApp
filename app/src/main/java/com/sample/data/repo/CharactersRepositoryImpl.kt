@@ -3,6 +3,7 @@ package com.sample.data.repo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sample.data.CharactersRepository
+import com.sample.data.model.CharacterData
 import com.sample.data.model.CharactersData
 import com.sample.data.network.CharacterApi
 import com.sample.data.util.toCharactersData
@@ -29,4 +30,11 @@ class CharactersRepositoryImpl(
     }
 
     override fun getCharacters(): LiveData<CharactersData> = characters
+
+    override suspend fun getCharacter(name: String): Result<CharacterData> {
+        return withContext(ioDispatcher) {
+            val character = characters.value?.relatedTopics?.find { it.firstUrl == name }
+            if (character != null) Result.success(character) else Result.failure(IOException("No character found!"))
+        }
+    }
 }

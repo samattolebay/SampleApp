@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.R
 
-class CharactersAdapter :
+class CharactersAdapter(private val onClick: (String) -> Int) :
     ListAdapter<CharacterViewData, CharactersAdapter.ViewHolder>(ItemDiffUtilCallback()) {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val onClick: (String) -> Int) :
+        RecyclerView.ViewHolder(view) {
         private val name: TextView
 
         init {
@@ -21,12 +22,13 @@ class CharactersAdapter :
 
         fun bind(data: CharacterViewData) {
             name.text = data.name
+            name.setOnClickListener { onClick(data.name) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, onClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
