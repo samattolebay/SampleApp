@@ -2,6 +2,8 @@ package com.sample.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import android.widget.Toast
@@ -53,7 +55,12 @@ class ListFragment : Fragment(R.layout.fragment_main) {
             }
         })
 
-        // TODO add loading
+        val container = view.findViewById<LinearLayout>(R.id.list_container)
+        val loadingBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        viewModel.loadingVisibility.observe(viewLifecycleOwner) {
+            loadingBar.visibility = if (it) View.VISIBLE else View.GONE
+            container.visibility = if (it) View.GONE else View.VISIBLE
+        }
 
         val adapter = CharactersAdapter { name ->
             childFragmentManager.beginTransaction()

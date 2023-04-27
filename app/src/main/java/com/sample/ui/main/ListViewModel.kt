@@ -13,6 +13,9 @@ class ListViewModel(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _loadingVisibility = MutableLiveData<Boolean>()
+    val loadingVisibility: LiveData<Boolean> = _loadingVisibility
+
     private val _characters: MutableLiveData<List<CharacterViewData>> =
         charactersRepository.getCharacters()
             .map { it.toCharacterViewDataList() } as MutableLiveData
@@ -20,10 +23,13 @@ class ListViewModel(
 
     fun fetchCharacters(query: String) {
         viewModelScope.launch {
-            val response = charactersRepository.fetchCharacters(query)
-            response.onFailure {
-                _error.postValue(it.message.toString())
-            }
+            charactersRepository.fetchCharacters(query)
+                .onFailure {
+                    _error.postValue(it.message.toString())
+                }
+                .onSuccess {
+                    _loadingVisibility.postValue(false)
+                }
         }
     }
 
