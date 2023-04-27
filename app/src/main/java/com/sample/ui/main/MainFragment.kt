@@ -1,12 +1,13 @@
 package com.sample.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.sample.R
 
 class MainFragment : Fragment() {
@@ -15,13 +16,7 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+    private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +27,14 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.msg.observe(viewLifecycleOwner) {
+        viewModel.error.observe(viewLifecycleOwner) {
+            Log.d("TAG", it)
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.characters.observe(viewLifecycleOwner) {
+            Log.d("TAG", it.toString())
+            Toast.makeText(context, it.heading, Toast.LENGTH_LONG).show()
         }
     }
 }

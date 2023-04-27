@@ -1,33 +1,53 @@
 package com.sample.ui.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.gson.GsonBuilder
-import com.sample.data.network.CharacterApi
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.sample.MyApplication
+import com.sample.data.CharactersRepository
+import com.sample.data.model.CharactersData
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val charactersRepository: CharactersRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    val msg = MutableLiveData<String>()
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
+
+    private val _characters: MutableLiveData<CharactersData> =
+        charactersRepository.getCharacters() as MutableLiveData
+    val characters: LiveData<CharactersData> = _characters
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val gson = GsonBuilder().setLenient().create()
+        viewModelScope.launch {
+            val response = charactersRepository.fetchCharacters()
+            response.onFailure {
+                _error.postValue(it.message.toString())
+            }
+        }
+    }
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://api.duckduckgo.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
+    // Define ViewModel factory in a companion object
+    companion object {
 
-            val characterApi = retrofit.create(CharacterApi::class.java)
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+            ): T {
+                // Get the Application object from extras
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                // Create a SavedStateHandle for this ViewModel from extras
+                val savedStateHandle = extras.createSavedStateHandle()
 
-            val x = characterApi.getCharacters()
-
-            msg.postValue(x.body().toString())
+                return MainViewModel(
+                    (application as MyApplication).charactersRepository,
+                    savedStateHandle
+                ) as T
+            }
         }
     }
 }

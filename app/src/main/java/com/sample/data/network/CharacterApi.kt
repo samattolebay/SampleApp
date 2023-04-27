@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface CharacterApi {
 
     @GET(".")
-    fun getCharacters(
+    suspend fun getCharacters(
         @Query("q") q: String = "the wire characters",
         @Query("format") format: String = "json",
     ): Response<CharactersResponseData>
