@@ -6,13 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.ListFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/characterList"
+    <LinearLayout
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:itemCount="20"
-        tools:listitem="@layout/item_list" />
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_characters" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/characterList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_list" />
+    </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/detail_container"

@@ -2,6 +2,8 @@ package com.sample.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,6 +38,21 @@ class ListFragment : Fragment(R.layout.fragment_main) {
             TwoPaneOnBackPressedCallback(slidingPaneLayout)
         )
 
+        val search = view.findViewById<SearchView>(R.id.search)
+        search.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                viewModel.search(p0)
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                if (p0?.isEmpty() == true) {
+                    viewModel.reset()
+                }
+                return false
+            }
+        })
+
         // TODO add loading
 
         val adapter = CharactersAdapter { name ->
@@ -54,7 +71,7 @@ class ListFragment : Fragment(R.layout.fragment_main) {
         }
 
         viewModel.characters.observe(viewLifecycleOwner) {
-            adapter.submitList(it.relatedTopics.toList())
+            adapter.submitList(it)
         }
     }
 }
