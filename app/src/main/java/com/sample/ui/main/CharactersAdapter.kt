@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.R
 
-class CharactersAdapter(private val onClick: (String) -> Int) :
+class CharactersAdapter(private val onClick: (String) -> Unit) :
     ListAdapter<CharacterViewData, CharactersAdapter.ViewHolder>(ItemDiffUtilCallback()) {
 
-    class ViewHolder(view: View, private val onClick: (String) -> Int) :
+    class ViewHolder(view: View, private val onClick: (String) -> Unit) :
         RecyclerView.ViewHolder(view) {
         private val name: TextView
 
