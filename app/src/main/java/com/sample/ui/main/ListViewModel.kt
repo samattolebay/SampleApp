@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.sample.MyApplication
 import com.sample.data.CharactersRepository
-import com.sample.data.model.CharactersData
+import com.sample.ui.util.toCharactersViewData
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class ListViewModel(
     private val charactersRepository: CharactersRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -16,9 +16,9 @@ class MainViewModel(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val _characters: MutableLiveData<CharactersData> =
-        charactersRepository.getCharacters() as MutableLiveData
-    val characters: LiveData<CharactersData> = _characters
+    private val _characters: MutableLiveData<CharactersViewData> =
+        charactersRepository.getCharacters().map { it.toCharactersViewData() } as MutableLiveData
+    val characters: LiveData<CharactersViewData> = _characters
 
     init {
         viewModelScope.launch {
@@ -43,7 +43,7 @@ class MainViewModel(
                 // Create a SavedStateHandle for this ViewModel from extras
                 val savedStateHandle = extras.createSavedStateHandle()
 
-                return MainViewModel(
+                return ListViewModel(
                     (application as MyApplication).charactersRepository,
                     savedStateHandle
                 ) as T
