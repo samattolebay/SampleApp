@@ -6,30 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.ListFragment">
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/characterList"
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="40dp"
-            android:padding="12dp"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            tools:text="Simpsons Characters" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/characterList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:itemCount="20"
-            tools:listitem="@layout/item_list" />
-    </LinearLayout>
+        tools:itemCount="20"
+        tools:listitem="@layout/item_list" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/detail_container"

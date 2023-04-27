@@ -2,7 +2,6 @@ package com.sample.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,8 +38,6 @@ class ListFragment : Fragment(R.layout.fragment_main) {
 
         // TODO add loading
 
-        val header = view.findViewById<TextView>(R.id.header)
-
         val adapter = CharactersAdapter { name ->
             childFragmentManager.beginTransaction()
                 .replace(R.id.detail_container, DetailsFragment.newInstance(name))
@@ -57,9 +54,7 @@ class ListFragment : Fragment(R.layout.fragment_main) {
         }
 
         viewModel.characters.observe(viewLifecycleOwner) {
-            Toast.makeText(context, it.heading, Toast.LENGTH_LONG).show()
             adapter.submitList(it.relatedTopics.toList())
-            header.text = it.heading
         }
     }
 }
