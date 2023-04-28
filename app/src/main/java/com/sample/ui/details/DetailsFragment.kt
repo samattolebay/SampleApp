@@ -39,7 +39,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         val description = view.findViewById<TextView>(R.id.description)
         val image = view.findViewById<ImageView>(R.id.image)
 
-        viewModel.getCharacter(characterName)
+        if (savedInstanceState == null)
+            viewModel.getCharacter(characterName)
 
         viewModel.error.observe(viewLifecycleOwner) {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()

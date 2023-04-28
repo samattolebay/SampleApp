@@ -2,7 +2,6 @@ package com.sample.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
@@ -16,7 +15,6 @@ import com.sample.BuildConfig
 import com.sample.R
 import com.sample.ui.details.DetailsFragment
 import com.sample.ui.util.Factory
-import com.sample.ui.util.TwoPaneOnBackPressedCallback
 
 class ListFragment : Fragment(R.layout.fragment_main) {
 
@@ -29,16 +27,10 @@ class ListFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchCharacters(BuildConfig.CHARACTER)
+        if (savedInstanceState == null)
+            viewModel.fetchCharacters(BuildConfig.CHARACTER)
 
         val slidingPaneLayout = view.findViewById<SlidingPaneLayout>(R.id.main)
-        slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
-
-        // Connect the SlidingPaneLayout to the system back button.
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            TwoPaneOnBackPressedCallback(slidingPaneLayout)
-        )
 
         val search = view.findViewById<SearchView>(R.id.search)
         search.setOnQueryTextListener(object : OnQueryTextListener {
@@ -55,12 +47,7 @@ class ListFragment : Fragment(R.layout.fragment_main) {
             }
         })
 
-        val container = view.findViewById<LinearLayout>(R.id.list_container)
         val loadingBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        viewModel.loadingVisibility.observe(viewLifecycleOwner) {
-            loadingBar.visibility = if (it) View.VISIBLE else View.GONE
-            container.visibility = if (it) View.GONE else View.VISIBLE
-        }
 
         val adapter = CharactersAdapter { name ->
             childFragmentManager.beginTransaction()
@@ -80,6 +67,8 @@ class ListFragment : Fragment(R.layout.fragment_main) {
 
         viewModel.characters.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+
+            loadingBar.visibility = View.GONE
         }
     }
 }
