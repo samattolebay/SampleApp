@@ -68,6 +68,7 @@ class ListFragment : Fragment(R.layout.fragment_main) {
                 .commit()
 
             slidingPaneLayout.open()
+            search.clearFocus()
         }
         val list = view.findViewById<RecyclerView>(R.id.characterList)
         list.layoutManager = LinearLayoutManager(context)
